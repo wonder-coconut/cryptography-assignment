@@ -5,37 +5,36 @@
 
 using namespace std;
 
-string shift_right(string temp, int shift)
+char shift_char_right(char ch, int shift)
 {
-    int lower,upper;
-    lower = upper = 0;
-    int ascii = 0;
-    for (int i = 0; i < temp.length(); i++)
-    {
-        if(isupper(temp[i]))
-            lower = 65;
-        else
-            lower = 97;
-        
-        upper = lower + 26;
+    int lower,upper,ascii;
+    if(isupper(ch))
+        lower = 65;
+    else
+        lower = 97;
+    
+    upper = lower + 26;
+    ascii = ch;
+    if(ascii + shift - lower < 0)
+        ascii = (ascii + shift - lower) % 26 + upper; 
+    else
+        ascii = (ascii + shift - lower) % 26 + lower;
+    ch = ascii;
+    
+    return ch;
 
-        ascii = temp[i];
-        if(ascii + shift - lower < 0)
-            ascii = (ascii + shift - lower) % 26 + upper; 
-        else
-            ascii = (ascii + shift - lower) % 26 + lower;
-        temp[i] = ascii;
-    }
-    return temp;    
 }
+/*
+string shift_right(string temp, int shift)
+{  
+}*/
 
 int ceaser(int shift, int decode)
 {
     ifstream infile;
     infile.open("process.txt");
     string temp1,temp2,cipher;
-    
-    int lower = 0;
+
     cipher = "";
 
     while(getline(infile,temp1))
@@ -46,18 +45,57 @@ int ceaser(int shift, int decode)
             if(str.eof() == 1)
                 break;
             str >> temp2;
-            temp2 = shift_right(temp2, pow(-1,decode) * shift);
+
+            for (int i = 0; i < temp2.length(); i++)
+            {
+                temp2[i] = shift_char_right(temp2[i], pow(-1,decode) * shift);
+            }
+
             cipher = cipher + temp2 + " ";
         }
         cipher = cipher + "\n";
     }
     cout << cipher;
-    return 0;
+    return 1;
 }
 
 int vignere(string key, int decode)
 {
-    cout << key;
+    ifstream infile;
+    infile.open("process.txt");
+    string temp1,temp2,cipher;
+    int keylower, keyupper, keyascii, shift;
+    keylower = keyupper = shift = keyascii = 0;
+    int keyindex = 0;
+
+    while(getline(infile,temp1))
+    {
+        stringstream str(temp1);
+        while(str)
+        {
+            if(str.eof() == 1)
+                break;
+            str >> temp2;
+            
+            for(int i = 0; i < temp2.length(); i++)
+            {
+                if(isupper(key[keyindex % key.length()]))
+                    keylower = 65;
+                else
+                    keylower = 97;
+                //keyupper = keylower + 26;
+
+                shift = key[keyindex % key.length()] - keylower;
+
+                temp2[i] = shift_char_right(temp2[i], pow(-1,decode) * shift);
+
+                keyindex++;
+            }
+            cipher = cipher + temp2 + " ";
+        }
+        cipher = cipher + "\n";
+    }
+    cout << cipher;
     return 0;
 }
 

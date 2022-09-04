@@ -6,5 +6,7 @@ using namespace std;
 
 int main()
 {
-    cout << pow(-1,0);    
+    string s = "abc";
+    int i = 4;
+    cout << s[i % s.length()] - 97;    
 }
