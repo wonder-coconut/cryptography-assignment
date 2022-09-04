@@ -7,7 +7,8 @@ using namespace std;
 
 string shift_right(string temp, int shift)
 {
-    int lower = 0;
+    int lower,upper;
+    lower = upper = 0;
     int ascii = 0;
     for (int i = 0; i < temp.length(); i++)
     {
@@ -16,14 +17,19 @@ string shift_right(string temp, int shift)
         else
             lower = 97;
         
+        upper = lower + 26;
+
         ascii = temp[i];
-        ascii = (ascii + shift - lower) % 26 + lower;
+        if(ascii + shift - lower < 0)
+            ascii = (ascii + shift - lower) % 26 + upper; 
+        else
+            ascii = (ascii + shift - lower) % 26 + lower;
         temp[i] = ascii;
     }
     return temp;    
 }
 
-int ceaser(int shift)
+int ceaser(int shift, int decode)
 {
     ifstream infile;
     infile.open("process.txt");
@@ -40,7 +46,7 @@ int ceaser(int shift)
             if(str.eof() == 1)
                 break;
             str >> temp2;
-            temp2 = shift_right(temp2,shift);
+            temp2 = shift_right(temp2, pow(-1,decode) * shift);
             cipher = cipher + temp2 + " ";
         }
         cipher = cipher + "\n";
@@ -49,13 +55,13 @@ int ceaser(int shift)
     return 0;
 }
 
-int vignere(string key)
+int vignere(string key, int decode)
 {
     cout << key;
     return 0;
 }
 
-int playfair(string key)
+int playfair(string key, int decode)
 {
     cout << key;
     return 0;
@@ -63,9 +69,11 @@ int playfair(string key)
 
 int main()
 {
-    int ch;
+    int ch,decode;
     cout << "1. Ceaser Cipher\n2. Vignere Cipher\n3. Playfair Cipher\nEnter your choice (1/2/3): ";
     cin >> ch;
+    cout << "Encode or Decode? (0,1): ";
+    cin >> decode;
     int shift;
     string key;
 
@@ -74,19 +82,19 @@ int main()
         case 1:
             cout << "Enter shift value: ";
             cin >> shift;
-            ceaser(shift);
+            ceaser(shift, decode);
             break;
         
         case 2:
             cout << "Enter key: ";
             cin >> key;
-            vignere(key);
+            vignere(key, decode);
             break;
         
         case 3:
             cout << "Enter key: ";
             cin >> key;
-            playfair(key);
+            playfair(key, decode);
             break;
         
         default:
