@@ -5,50 +5,19 @@
 using namespace std;
 
 
-string genkeysquare(string key, char omit)
+void lower(string *plaintext)
 {
-    int keyindex = 0;
-    string keysquare = "";
-    char keyfill = 'a';
-    for (int i = 0; i < 25;)
+    for (int i = 0; i < plaintext->length(); i++)
     {
-        if(keyindex < key.length())
-        {
-            if(keysquare.find(key[keyindex]) > keysquare.length())
-            {
-                keysquare += key[keyindex++];
-                i++;
-            }
-            else
-                keyindex++;
-        }
-        else
-        {
-            if(keysquare.find(keyfill) > keysquare.length() && keyfill != omit)
-            {
-                keysquare += keyfill++;
-                i++;
-            }
-            else
-                keyfill++;
-        }
-    }
-    
-    return keysquare;
+        if(isupper((*plaintext)[i]))
+            (*plaintext)[i] += 32;
+    }   
 }
 
 int main()
 {
-    string key = "aabababbasbd";
-    char omit = 'b';
-    string keysquare = genkeysquare(key, omit);
-
-    for(int i = 0; i < 5; i++)
-    {
-        for(int j = 0; j < 5; j++)
-        {
-            cout << keysquare[i*5 + j] << " ";
-        }
-        cout << endl;
-    }
+    string str;
+    str = "aBcD";
+    lower(&str);
+    cout << str;
 }

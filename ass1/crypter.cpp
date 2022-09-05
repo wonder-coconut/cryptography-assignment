@@ -27,6 +27,8 @@ char shift_char_right(char ch, int shift)
 
 int ceaser(int shift, int decode)
 {
+    //sanity checks:
+    //text is only alphabet
     ifstream infile;
     infile.open("process.txt");
     string temp1,temp2,cipher;
@@ -57,6 +59,9 @@ int ceaser(int shift, int decode)
 
 int vignere(string key, int decode)
 {
+    //sanity checks:
+    //key and text contains only alphabets
+    //key is only lowercase
     ifstream infile;
     infile.open("process.txt");
     string temp1,temp2,cipher;
@@ -127,9 +132,117 @@ string genkeysquare(string key, char omit)
     return keysquare;
 }
 
+char calc_omit(string key)
+{   //todo
+    return 'j';
+}
+
+char calc_junk(string plaintext)
+{
+    //todo
+    return 'x';
+}
+
+void lower(string *plaintext)
+{
+    for (int i = 0; i < plaintext->length(); i++)
+    {
+        if(isupper((*plaintext)[i]))
+            (*plaintext)[i] += 32;
+    }
+}
+
+string playfair_encrypt(string duo, string grid)
+{
+    string cipherduo = "  ";
+    int i,j,i1,i2,j1,j2,temp;
+    i = grid.find(duo[0]);
+    i1 = i/5;
+    i2 = i%5;
+    j = grid.find(duo[1]);
+    j1 = j/5;
+    j2 = j%5;
+
+    cout << duo << ":\t" << "(" << i1 << "," << i2 << "), (" << j1 << "," << j2 << ")\n";
+
+    if(i2 == j2)
+    {
+        i1 = (i1 + 1) % 5;
+        j1 = (j1 + 1) % 5;
+    }
+    else if(i1 == j1)
+    {
+        i2 = (i2 + 1) % 5;
+        j2 = (j2 + 1) % 5;
+    }
+    else
+    {
+        temp = i2;
+        i2 = j2;
+        j2 = temp;
+    }
+
+    cipherduo[0] = grid[i1 * 5 + i2];
+    cipherduo[1] = grid[j1 * 5 + j2];
+    cout << cipherduo << ":\t" << "(" << i1 << "," << i2 << "), (" << j1 << "," << j2 << ")\n- - - - - - - \n";
+    return duo;
+}
+
 int playfair(string key, int decode)
 {
-    cout << key;
+    //sanity checks:
+    //key is not longer than 25 unique characters
+    //omit is not part of key
+    
+    ifstream infile;
+    infile.open("process.txt");
+    char omit, junk;
+    omit = calc_omit(key);
+
+    string keysquare = genkeysquare(key,omit);
+
+    string temp,plaintext, cipher;
+    while(infile)
+    {
+        if(infile.eof() == 1)
+            break;
+        infile >> temp;
+        plaintext += temp;
+    }
+    lower(&plaintext);
+
+    junk = calc_junk(plaintext);
+
+    string bifurcated_text = "";
+    for (int i = 0; i < plaintext.length(); i+=2)
+    {
+        temp = plaintext.substr(i,2);
+        if(temp.length() == 1)
+            temp += junk;
+        else if(temp[0] == temp[1])
+        {
+            temp[1] = junk;
+            temp += temp[0];
+            temp += junk; //figure out how to do in a single line
+        }
+        bifurcated_text += temp;
+    }
+    
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            cout << keysquare[i*5 + j] << " ";
+        }
+        cout << endl;
+    }
+    
+    for (int i = 0; i < bifurcated_text.length(); i+=2)
+    {
+        temp = bifurcated_text.substr(i,2);
+        temp = playfair_encrypt(temp,keysquare);
+    }
+    
     return 0;
 }
 
