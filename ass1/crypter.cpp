@@ -24,10 +24,6 @@ char shift_char_right(char ch, int shift)
     return ch;
 
 }
-/*
-string shift_right(string temp, int shift)
-{  
-}*/
 
 int ceaser(int shift, int decode)
 {
@@ -97,6 +93,38 @@ int vignere(string key, int decode)
     }
     cout << cipher;
     return 0;
+}
+
+string genkeysquare(string key, char omit)
+{
+    int keyindex = 0;
+    string keysquare = "";
+    char keyfill = 'a';
+    for (int i = 0; i < 25;)
+    {
+        if(keyindex < key.length())
+        {
+            if(keysquare.find(key[keyindex]) > keysquare.length())
+            {
+                keysquare += key[keyindex++];
+                i++;
+            }
+            else
+                keyindex++;
+        }
+        else
+        {
+            if(keysquare.find(keyfill) > keysquare.length() && keyfill != omit)
+            {
+                keysquare += keyfill++;
+                i++;
+            }
+            else
+                keyfill++;
+        }
+    }
+    
+    return keysquare;
 }
 
 int playfair(string key, int decode)
