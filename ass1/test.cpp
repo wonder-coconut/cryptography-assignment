@@ -9,11 +9,15 @@ string genkeysquare(string key, char omit)
     int keyindex = 0;
     string keysquare = "";
     char keyfill = 'a';
+
+    cout << "Omit: " << omit << endl;
+
     for (int i = 0; i < 25;)
     {
         if(keyindex < key.length())//until end of key
         {
-            if(keysquare.find(key[keyindex]) > keysquare.length())//duplicatoin
+            cout << keyindex << " " << (key[keyindex]==omit) << "\t" << key[keyindex] << " " << omit << endl;
+            if(keysquare.find(key[keyindex]) > keysquare.length() && key[keyindex] != omit)//duplicatoin
             {
                 keysquare += key[keyindex++];
                 i++;
@@ -38,7 +42,7 @@ string genkeysquare(string key, char omit)
 
 int main()
 {
-    string s = genkeysquare("blah",'j');
+    string s = genkeysquare("abcdefghijklmnopqrstuvwxyz",'j');
     for (int i = 0; i < 5; i++)
     {
         for (int j = 0; j < 5; j++)
@@ -46,7 +50,5 @@ int main()
             cout << s[i*5+j] << ' ';
         }
         cout << endl;
-        
     }
-    
 }

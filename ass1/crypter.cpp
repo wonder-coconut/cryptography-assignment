@@ -105,7 +105,7 @@ string genkeysquare(string key, char omit)
     {
         if(keyindex < key.length())//until end of key
         {
-            if(keysquare.find(key[keyindex]) > keysquare.length())//duplicatoin
+            if(keysquare.find(key[keyindex]) > keysquare.length() && key[keyindex] != omit)//duplication
             {
                 keysquare += key[keyindex++];
                 i++;
@@ -213,7 +213,6 @@ int playfair(string key, int decode)
 {//implement playfair cipher
     //sanity checks:
     //key is not longer than 25 unique characters
-    //omit is not part of key
     
     ifstream infile;
     infile.open("process.txt");
@@ -247,7 +246,7 @@ int playfair(string key, int decode)
         cout << endl;
     }
     cout << endl;
-    
+
     string bifurcated_text = "";
     for (int i = 0; i < plaintext.length(); i+=2)
     {
