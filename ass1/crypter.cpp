@@ -25,8 +25,8 @@ char shift_char_right(char ch, int shift)
 
 }
 
-int ceaser(int shift, int decode)
-{//ceaser cipher implementation
+int caesar(int shift, int decode)
+{//caesar cipher implementation
     //sanity checks:
     //text is only alphabet
     ifstream infile;
@@ -277,8 +277,8 @@ int main()
 {
     int ch,decode;
     cout << "NOTE: input file only accepts alphabets. ";
-    cout << "Multi line texts with white spaces are maintained in ceaser and vignere ciphers.";
-    cout << "\n\n\n1. Ceaser Cipher\n2. Vignere Cipher\n3. Playfair Cipher\nEnter your choice (1/2/3): ";
+    cout << "Multi line texts with white spaces are maintained in caesar and vignere ciphers.";
+    cout << "\n\n\n1. caesar Cipher\n2. Vignere Cipher\n3. Playfair Cipher\nEnter your choice (1/2/3): ";
     cin >> ch;
     cout << "\nEncode or Decode? (0,1): ";
     cin >> decode;
@@ -290,7 +290,7 @@ int main()
         case 1:
             cout << "\nEnter shift value: ";
             cin >> shift;
-            ceaser(shift, decode);
+            caesar(shift, decode);
             break;
         
         case 2:
