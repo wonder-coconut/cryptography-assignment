@@ -74,7 +74,19 @@ int shiftcipher_cryptanalysis(string cipher)
         return shift;
 }
 
-int main()
+void caesar()
+{
+    ifstream infile;
+    infile.open("process.txt");
+    string cipher;
+
+    getline(infile,cipher);
+
+    int shift = shiftcipher_cryptanalysis(cipher);
+    cout << "Shift: " << shift << endl;
+}
+
+void vigenere()
 {
     ifstream infile;
     infile.open("process.txt");
@@ -154,6 +166,28 @@ int main()
         for (int j = i; j < cipher.length(); j += keylen)
             subcipher += cipher[j];
         shift = shiftcipher_cryptanalysis(subcipher);
-        cout << char(65 + shift);
+        key = key + char(65 + shift);
+    }
+    cout << "Key: " << key << endl;
+}
+
+int main()
+{
+    cout << "Enter encryption to break:\n1)Caesar Cipher\n2)Vigenere Cipher\nEnter choice:";
+    int choice = 0;
+    cin >> choice;
+
+    switch (choice)
+    {
+    case 1:
+        caesar();
+        break;
+    
+    case 2:
+        vigenere();
+        break;
+
+    default:
+        break;
     }
 }
