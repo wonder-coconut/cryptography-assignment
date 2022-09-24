@@ -50,4 +50,6 @@ int main()
     }
 
     int shift = (cipher_max_i - eng_max_i) > 0 ? cipher_max_i - eng_max_i : cipher_max_i - eng_max_i + 26;
+
+    cout << shift << endl;
 }
