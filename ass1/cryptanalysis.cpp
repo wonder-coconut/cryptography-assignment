@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -94,7 +95,7 @@ void vigenere()
 
     getline(infile,cipher);
 
-    int max_ngrams = 50;
+    int max_ngrams = 75;
     string ngrams[max_ngrams];
     string ngram1,ngram2;
     ngram1 = ngram2 = "";
@@ -177,17 +178,26 @@ int main()
     int choice = 0;
     cin >> choice;
 
-    switch (choice)
-    {
-    case 1:
-        caesar();
-        break;
-    
-    case 2:
-        vigenere();
-        break;
+    clock_t start,end;
 
-    default:
-        break;
+    if(choice == 1)
+    {
+        start = clock();
+
+        caesar();
+
+        end = clock();
+        double time = double(end - start)/double(CLOCKS_PER_SEC);
+        cout << "Time elapsed: " << time << endl;
+    }
+    else if(choice == 2)
+    {
+        start = clock();
+        
+        vigenere();
+
+        end = clock();
+        double time = double(end - start)/double(CLOCKS_PER_SEC);
+        cout << "Time elapsed: " << time << endl;
     }
 }
