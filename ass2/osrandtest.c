@@ -77,15 +77,15 @@ double kstest(double *sequence)
 
     for (int i = 0; i < len; i++)
     {
-        double fyk_1 = (i-1)/(len * 1.0);
+        double fyk_1 = (i)/(len * 1.0);
         double cdf = sequence[i]/(rangeU - rangeL);
-        double fyk = i/(len * 1.0);
+        double fyk = (i+1)/(len * 1.0);
         double a = fabs(fyk_1 - cdf);
         double b = fabs(cdf - fyk);
 
         max = (max < a)? a : ((max < b)? b : max);
 
-        //printf("%d.\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\n",i,sequence[i],fyk_1,cdf,fyk,a,b);
+        printf("%d.\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\n",i+1,sequence[i],fyk_1,cdf,fyk,a,b);
     }
 
     return max;
