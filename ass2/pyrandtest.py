@@ -35,6 +35,7 @@ def chisquaretest(randsequence):
         i += 1
 
     return res
+#end of function
 
 randsequence = []
 seedlist = []

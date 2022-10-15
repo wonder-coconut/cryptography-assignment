@@ -4,6 +4,25 @@
 #include <math.h>
 #include <string.h>
 
+void swap(double *a, double *b)
+{
+    double temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void sort(double *sequence, int len)
+{
+    for (int i = 0; i < len; i++)
+    {
+        for (int j = 0; j < len; j++)
+        {
+            if(sequence[i] < sequence[j])
+                swap(&sequence[i], &sequence[j]);
+        }
+    }
+}
+
 double chisquaretest(int *sequence)
 {
     int len = 5000;
@@ -45,54 +64,110 @@ double chisquaretest(int *sequence)
     return res;
 }
 
-int main()
+double kstest(double *sequence)
 {
-    int len = 5000;
+    int len = 30;
+    int rangeL = 0;
+    int rangeU = 20;
 
-    double criticalchi95_left = 74.2219;
-    double criticalchi95_right = 129.5612;
+    double res1,res2 = 0.0;
+    double max = 0;
+
+    sort(sequence, len);
+
+    for (int i = 0; i < len; i++)
+    {
+        double fyk_1 = (i-1)/(len * 1.0);
+        double cdf = sequence[i]/(rangeU - rangeL);
+        double fyk = i/(len * 1.0);
+        double a = fabs(fyk_1 - cdf);
+        double b = fabs(cdf - fyk);
+
+        max = (max < a)? a : ((max < b)? b : max);
+
+        //printf("%d.\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\n",i,sequence[i],fyk_1,cdf,fyk,a,b);
+    }
+
+    return max;
+}
+
+void driver(int test)
+{
+    int len;
+    double quantile_95_left,quantile_95_right,quantile_99_left,quantile_99_right;
+    if(!test)
+    {
+        len = 5000;
+
+        quantile_95_left = 74.2219;
+        quantile_95_right = 129.5612;
+        quantile_99_left = 67.3276;
+        quantile_99_right = 140.1695;
+    }
+    else
+    {
+        len = 30;
+        
+        quantile_95_left = 0;
+        quantile_95_right = 0.24170;
+        quantile_99_left = 0;
+        quantile_99_right = 0.28988;
+    }
     
-    double criticalchi99_left = 67.3276;
-    double criticalchi99_right = 140.1695;
-    
-    printf("Critical values for 95%% confidence: %lf %lf\n",criticalchi95_left,criticalchi95_right);
-    printf("Critical values for 99%% confidence: %lf %lf\n",criticalchi99_left,criticalchi99_right);
+    printf("Critical values for 95%% confidence: %lf %lf\n",quantile_95_left,quantile_95_right);
+    printf("Critical values for 99%% confidence: %lf %lf\n",quantile_99_left,quantile_99_right);
 
     srand(time(NULL));
     int seedarray[13];
 
     for (int i = 0; i < 13; i++)
-    {
         seedarray[i] = rand();
-    }
 
     for (int i = 0; i < 13; i++)
     {
         printf("-*-*-*-*-*   TEST NO. %d   -*-*-*-*-*\n",(i+1));
-
-        int* sequence = (int*)malloc(len*sizeof(int));
-
+        double res = 0;
         srand(seedarray[i]);
 
-        for (int i = 0; i < len; i++)
+        switch (test)
         {
-            sequence[i] = rand() % 200 + 1;
+            case 0:
+                int* chisequence = (int*)malloc(len*sizeof(int));
+                for (int i = 0; i < len; i++)
+                    chisequence[i] = rand() % 200 + 1;
+                res = chisquaretest(chisequence);
+                free(chisequence);
+                break;
+
+            case 1:
+                double* kssequence = (double*)malloc(len*sizeof(double));
+                for (int i = 0; i < len; i++)
+                    kssequence[i] = (float)rand()/(RAND_MAX * 1.0) * 20;
+                res = kstest(kssequence);
+                free(kssequence);
+                break;
+
+            default:
+                break;
         }
-
-        double res = chisquaretest(sequence);
-        free(sequence);
-
+        
         printf("%lf\n",res);
 
-        if(res <= criticalchi95_left || res >= criticalchi95_right)
+        if(res <= quantile_95_left || res >= quantile_95_right)
             printf("(95%%) not random\n");
         else
             printf("(95%%) random\n");
         
 
-        if(res <= criticalchi99_left || res >= criticalchi99_right)
+        if(res <= quantile_99_left || res >= quantile_99_right)
             printf("(99%%) not random\n");
         else
             printf("(99%%) random\n");
     }
+}
+
+int main()
+{
+    //chisquaredriver();
+    driver(1);
 }
