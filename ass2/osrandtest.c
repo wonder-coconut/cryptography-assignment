@@ -85,7 +85,7 @@ double kstest(double *sequence)
 
         max = (max < a)? a : ((max < b)? b : max);
 
-        printf("%d.\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\n",i+1,sequence[i],fyk_1,cdf,fyk,a,b);
+        //printf("%d.\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\n",i+1,sequence[i],fyk_1,cdf,fyk,a,b);
     }
 
     return max;
@@ -151,7 +151,7 @@ void driver(int test)
                 break;
         }
         
-        printf("%lf\n",res);
+        printf("Test statistic: %lf\n",res);
 
         if(res <= quantile_95_left || res >= quantile_95_right)
             printf("(95%%) not random\n");
@@ -168,6 +168,9 @@ void driver(int test)
 
 int main()
 {
-    //chisquaredriver();
-    driver(1);
+    printf("1. Chi Square Test (two tailed)\n2. Kolmogorov Smirnov Test (right tail)\nEnter your choice:");
+    int test = 0;
+    scanf("%d",&test);
+    test--;
+    driver(test);
 }

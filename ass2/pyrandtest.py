@@ -1,4 +1,5 @@
 
+from cgi import test
 import random
 
 def sort(randsequence, len):
@@ -141,4 +142,8 @@ def driver(test):
         else:
             print("(99%) random")
 
-driver(1)
+
+print("1. Chi Square Test (two tailed)\n2. Kolmogorov Smirnov Test (right tail)\nEnter your choice:")
+testnum = int(input())
+testnum -= 1
+driver(testnum)
